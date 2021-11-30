@@ -8,6 +8,33 @@ using namespace std;
 #define BLUE "\x1B[34m"
 #define MAG "\x1B[35m"
 #define MAX 100
+#define modValue 1000000007
+typedef long long int ll;
+
+ll edit_distance(string a, string b)
+{
+    ll m = a.size();
+    ll n = b.size();
+    ll dp[m + 1][n + 1];
+
+    for (int i = 0; i <= m; i++) //first column
+        dp[i][0] = i;
+
+    for (int j = 0; j <= n; j++) // first row
+        dp[0][j] = j;            //convert a null string to some substring of b
+
+    //dp[i][j] is the edit distance between x[0...i-1] and y[0...j-1]
+    for (int i = 1; i <= m; i++)
+        for (int j = 1; j <= n; j++)
+        {
+            int diff = 1;
+            if (a[i - 1] == b[j - 1])
+                diff = 0;
+            dp[i][j] = min(1 + dp[i - 1][j], 1 + dp[i][j - 1]);
+            dp[i][j] = min(diff + dp[i - 1][j - 1], dp[i][j]);
+        }
+    return dp[m][n];
+}
 
 // assumption - all words are in lowercase alphabet
 // every node in the trie can have atmost 26 child node
